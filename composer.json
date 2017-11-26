@@ -18,6 +18,7 @@
         "botman/studio-addons": "~1.0",
         "botman/tinker": "~1.0",
         "clue/stdio-react": "^1.0",
+        "facebook/graph-sdk": "^5.6",
         "fideloper/proxy": "~3.3",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
