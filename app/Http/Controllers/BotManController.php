@@ -6,6 +6,8 @@ use App\Conversations\CreateMessageConversation;
 use App\Conversations\HelpConversation;
 use App\GenericMessage;
 use App\ImageMessage;
+use App\Services\RedditService;
+use App\User;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
@@ -14,6 +16,17 @@ use App\Conversations\ExampleConversation;
 
 class BotManController extends Controller
 {
+
+    /**
+     * @var RedditService $redditService
+     */
+    private $redditService;
+
+    public function __construct()
+    {
+        $this->redditService = resolve(RedditService::class);
+    }
+
     /**
      * Place your BotMan logic here.
      */
@@ -73,6 +86,23 @@ class BotManController extends Controller
             return $bot->reply($generalMessage->response);
         }
 
-        return $bot->reply('You fuckin what m8?!');
+        return $bot->reply('I beg your pardon');
+    }
+
+    public function tellAJoke(BotMan $bot)
+    {
+        $botUser = $bot->getUser();
+        $user = User::where('identifier', $botUser->getId())->first();
+
+        if (!$user) {
+            $user = new User();
+            $user->identifier = $botUser->getId();
+            $user->save();
+        }
+
+        $post = $this->redditService->getUserJoke($user);
+
+        $bot->reply($post->title);
+        $bot->reply($post->punchline);
     }
 }
