@@ -14,8 +14,9 @@ class CreateGenericMessage extends Migration
     public function up()
     {
         Schema::create('generic_message', function (Blueprint $blueprint) {
-           $blueprint->string('message');
-           $blueprint->string('response');
+            $blueprint->increments('id');
+            $blueprint->string('message');
+            $blueprint->string('response');
         });
     }
 
@@ -26,6 +27,6 @@ class CreateGenericMessage extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('generic_message');
     }
 }

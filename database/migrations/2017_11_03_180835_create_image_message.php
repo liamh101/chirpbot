@@ -14,6 +14,7 @@ class CreateImageMessage extends Migration
     public function up()
     {
         Schema::create('image_message', function (Blueprint $blueprint) {
+            $blueprint->increments('id');
             $blueprint->string('message');
             $blueprint->string('response');
             $blueprint->string('image');
@@ -27,6 +28,6 @@ class CreateImageMessage extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('image_message');
     }
 }
