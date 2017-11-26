@@ -33,7 +33,7 @@ class CreateMessageConversation extends Conversation
     public function askType()
     {
         $question = Question::create("what kind of message do you want to create?")
-            ->fallback('What the fuck you sayin?')
+            ->fallback('What are you sayin?')
             ->callbackId('ask_type')
             ->addButtons([
                 Button::create('Create generic message')->value('text'),
