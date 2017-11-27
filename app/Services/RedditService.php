@@ -126,6 +126,10 @@ class RedditService
                     continue;
                 }
 
+                if ($post->data->link_flair_text === 'Long') {
+                    continue;
+                }
+
                 if ($this->postExists($post->data->url, JokePost::query())) {
                     continue;
                 }
