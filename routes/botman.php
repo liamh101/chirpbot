@@ -11,8 +11,6 @@ $botman->middleware->received($dialogflow);
 
 $botman->hears('joke', BotManController::class.'@tellAJoke')->middleware($dialogflow);
 
-$botman->hears('Start conversation', BotManController::class.'@startConversation');
-
 $botman->hears('Help!', BotManController::class.'@helpUser');
 
 $botman->hears('Create message', BotManController::class.'@createMessage');
