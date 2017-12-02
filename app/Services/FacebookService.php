@@ -3,11 +3,14 @@
 namespace App\Services;
 
 use App\PhotoPost;
-use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;
 use Facebook\Facebook;
 use Facebook\FacebookResponse;
 
+/**
+ * Class FacebookService
+ * @package App\Services
+ */
 class FacebookService
 {
     /**
@@ -15,11 +18,21 @@ class FacebookService
      */
     private $facebook;
 
+    /**
+     * FacebookService constructor.
+     */
     public function __construct()
     {
         $this->facebook = resolve(Facebook::class);
     }
 
+    /**
+     * Mae a message post to the facebook wall.
+     *
+     * @param string $message
+     * @return FacebookResponse
+     * @throws FacebookSDKException
+     */
     public function createNewPost(string $message): FacebookResponse
     {
         $response = $this->facebook->post('/me/feed', ['message' => $message]);
@@ -33,6 +46,7 @@ class FacebookService
      * @param string $title
      * @param string $url
      * @return \Facebook\FacebookResponse
+     * @throws FacebookSDKException
      */
     public function createNewPhotoPost(string $title, string $url): FacebookResponse
     {

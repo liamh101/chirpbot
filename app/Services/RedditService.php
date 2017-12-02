@@ -3,14 +3,15 @@
 namespace App\Services;
 
 use App\JokePost;
-use App\PhotoPost;
 use App\RedditDomainBlacklist;
 use App\User;
 use App\UserJoke;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
-
+/**
+ * Class RedditService
+ * @package App\Services
+ */
 class RedditService
 {
     /**
@@ -37,6 +38,7 @@ class RedditService
      * Get the current best image from r/funny.
      *
      * @return array|null
+     * @throws \Exception
      */
     public function getTopFunnyImage(): ?array
     {
@@ -190,6 +192,8 @@ class RedditService
     }
 
     /**
+     * Is the current domain blacklisted.
+     *
      * @param string $domain
      * @return bool
      */
@@ -199,6 +203,8 @@ class RedditService
     }
 
     /**
+     * Does the post currently exist in the database.
+     *
      * @param string $postLink
      * @param Builder $query
      * @return bool
@@ -208,6 +214,13 @@ class RedditService
         return !!$query->where('link', $postLink)->first();
     }
 
+    /**
+     * Has the user seen the current joke.
+     *
+     * @param User $user
+     * @param JokePost $joke
+     * @return bool
+     */
     private function userSeenJoke(User $user, JokePost $joke): bool
     {
         return !!UserJoke::where([
