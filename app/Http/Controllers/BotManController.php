@@ -11,9 +11,12 @@ use App\User;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
-use Illuminate\Http\Request;
-use App\Conversations\ExampleConversation;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class BotManController
+ * @package App\Http\Controllers
+ */
 class BotManController extends Controller
 {
 
@@ -22,6 +25,9 @@ class BotManController extends Controller
      */
     private $redditService;
 
+    /**
+     * BotManController constructor.
+     */
     public function __construct()
     {
         $this->redditService = resolve(RedditService::class);
@@ -45,17 +51,27 @@ class BotManController extends Controller
         return view('tinker');
     }
 
+    /**
+     * @param BotMan $bot
+     */
     public function helpUser(BotMan $bot)
     {
         $bot->startConversation(new HelpConversation());
     }
 
+    /**
+     * @param BotMan $bot
+     */
     public function createMessage(BotMan $bot)
     {
         $bot->startConversation(new CreateMessageConversation());
     }
 
-    public function fallBackMessages(BotMan $bot)
+    /**
+     * @param BotMan $bot
+     * @return Response
+     */
+    public function fallBackMessages(BotMan $bot): Response
     {
         $messageText = $bot->getMessage()->getText();
 
@@ -80,7 +96,11 @@ class BotManController extends Controller
         return $bot->reply('I beg your pardon');
     }
 
-    public function tellAJoke(BotMan $bot)
+    /**
+     * @param BotMan $bot
+     * @return Response
+     */
+    public function tellAJoke(BotMan $bot): Response
     {
         $botUser = $bot->getUser();
         $user = User::where('identifier', $botUser->getId())->first();
@@ -94,6 +114,6 @@ class BotManController extends Controller
         $post = $this->redditService->getUserJoke($user);
 
         $bot->reply($post->title);
-        $bot->reply($post->punchline);
+        return $bot->reply($post->punchline);
     }
 }
