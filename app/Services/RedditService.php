@@ -80,6 +80,7 @@ class RedditService
      *
      * @param User $user
      * @return JokePost
+     * @throws \Exception
      */
     public function getUserJoke(User $user): JokePost
     {
@@ -110,6 +111,10 @@ class RedditService
         return $post;
     }
 
+    /**
+     * @return JokePost
+     * @throws \Exception
+     */
     public function getTopJokePost(): JokePost
     {
         $joke = null;

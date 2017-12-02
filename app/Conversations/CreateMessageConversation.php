@@ -55,7 +55,7 @@ class CreateMessageConversation extends Conversation
 
     public function createGenericMessage()
     {
-        $this->ask('Please set message', function (Answer $answer) {
+         $this->ask('Please set message', function (Answer $answer) {
             $this->message = $answer->getText();
 
             $this->ask('What response should I give?', function (Answer $answer) {
