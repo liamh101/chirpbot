@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Services\FacebookService;
 use App\Services\RedditService;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class FacebookController
+ * @package App\Http\Controllers
+ */
 class FacebookController extends Controller
 {
     /**
@@ -18,28 +22,30 @@ class FacebookController extends Controller
      */
     private $redditService;
 
+    /**
+     * FacebookController constructor.
+     * @param FacebookService $facebookService
+     */
     public function __construct(FacebookService $facebookService)
     {
         $this->facebookService = $facebookService;
         $this->redditService = resolve(RedditService::class);
     }
 
-    public function test()
-    {
-        $response = $this->facebookService->createNewPost('It works!');
-
-        $graphNode = $response->getGraphNode();
-
-        return 'Posted with id: ' . $graphNode['id'];
-    }
-
-    public function uploadPhoto()
+    /**
+     * Post reddit's top funny image to the facebook wall
+     *
+     * @return Response
+     * @throws \Exception
+     * @throws \Facebook\Exceptions\FacebookSDKException
+     */
+    public function uploadPhoto(): Response
     {
         $post = $this->redditService->getTopFunnyImage();
         $response = $this->facebookService->createNewPhotoPost($post['title'], $post['link']);
 
         $graphNode = $response->getGraphNode();
 
-        return 'Posted with id: ' . $graphNode['id'];
+        return Response('Posted with id: ' . $graphNode['id']);
     }
 }
