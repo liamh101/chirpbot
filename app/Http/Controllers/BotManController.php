@@ -11,6 +11,7 @@ use App\User;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\Drivers\Slack\SlackDriver;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -71,8 +72,12 @@ class BotManController extends Controller
      * @param BotMan $bot
      * @return Response
      */
-    public function fallBackMessages(BotMan $bot): Response
+    public function fallBackMessages(BotMan $bot)
     {
+        if ($bot->getDriver() instanceof SlackDriver) {
+            return null;
+        }
+
         $messageText = $bot->getMessage()->getText();
 
         $imageMessage = ImageMessage::where('message', $messageText)->first();
@@ -100,7 +105,7 @@ class BotManController extends Controller
      * @param BotMan $bot
      * @return Response
      */
-    public function tellAJoke(BotMan $bot): Response
+    public function tellAJoke(BotMan $bot)
     {
         $botUser = $bot->getUser();
         $user = User::where('identifier', $botUser->getId())->first();

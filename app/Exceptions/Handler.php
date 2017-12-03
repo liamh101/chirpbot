@@ -31,11 +31,23 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function report(Exception $exception)
     {
+
+        if (env('SLACK_ERROR_HANDLING', false)) {
+            $botman = resolve('botman');
+
+            $botman->say(
+                $exception->getMessage(),
+                env('SLACK_ERROR_CHANNEL_ID'),
+                \BotMan\Drivers\Slack\SlackDriver::class
+            );
+        }
+
+
         parent::report($exception);
     }
 
