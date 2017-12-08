@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\JokePost;
+use App\PhotoPost;
 use App\RedditDomainBlacklist;
 use App\User;
 use App\UserJoke;
@@ -53,7 +54,11 @@ class RedditService
                     continue;
                 }
 
-                if ($this->postExists($post->data->url)) {
+                if ($post->data->stickied) {
+                    continue;
+                }
+
+                if ($this->postExists($post->data->url, PhotoPost::query())) {
                     continue;
                 }
 
@@ -204,7 +209,13 @@ class RedditService
      */
     private function isBlacklistedDomain(string $domain): bool
     {
-        return in_array($domain, RedditDomainBlacklist::all());
+        $blacklist = RedditDomainBlacklist::all();
+
+        if (is_array($blacklist)) {
+            return in_array($domain, RedditDomainBlacklist::all());
+        }
+
+        return false;
     }
 
     /**
@@ -229,8 +240,8 @@ class RedditService
     private function userSeenJoke(User $user, JokePost $joke): bool
     {
         return !!UserJoke::where([
-                ['userId', '=', $user->id],
-                ['jokeId', '=', $joke->id]
-            ])->first();
+            ['userId', '=', $user->id],
+            ['jokeId', '=', $joke->id]
+        ])->first();
     }
 }
