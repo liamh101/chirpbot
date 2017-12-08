@@ -62,6 +62,10 @@ class RedditService
                     continue;
                 }
 
+                if ($this->isGif($post->data->url)) {
+                    continue;
+                }
+
                 if (
                     $post->data->post_hint === 'image' ||
                     $post->data->post_hint === 'link'
@@ -228,6 +232,17 @@ class RedditService
     private function postExists(string $postLink, Builder $query): bool
     {
         return !!$query->where('link', $postLink)->first();
+    }
+
+    /**
+     * Check if post isn't a gif
+     *
+     * @param string $post
+     * @return bool
+     */
+    private function isGif(string $post): bool
+    {
+        return !!preg_match('/(.gif)/', $post);
     }
 
     /**
