@@ -43,13 +43,15 @@ class facebookPhotoPost extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      * @throws \Exception
      * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    public function handle()
+    public function handle(): void
     {
         $post = $this->redditService->getTopFunnyImage();
         $this->facebookService->createNewPhotoPost($post['title'], $post['link']);
+
+        $this->info('Funny post has been created');
     }
 }

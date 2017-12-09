@@ -40,15 +40,17 @@ class facebookTokenGenerator extends Command
     /**
      * Execute the console command.
      *
-     * @return bool
+     * @return void
      * @throws \Facebook\Exceptions\FacebookSDKException
      */
-    public function handle()
+    public function handle(): void
     {
         $token = $this->facebookService->generateAccessToken();
 
         $facebookTokenEntity = new FacebookAccessTokens();
         $facebookTokenEntity->token = $token;
-        return $facebookTokenEntity->save();
+        $facebookTokenEntity->save();
+
+        $this->info('Token has been successfully generated');
     }
 }
